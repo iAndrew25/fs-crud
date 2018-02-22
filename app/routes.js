@@ -1,7 +1,6 @@
 import {Switch, Route} from 'react-router-dom';
 import {logoutRedirect} from './commons/utils/auth';
 import {isTokenSet} from './commons/utils/tokens';
-import {getUser, setUser} from './commons/utils/user-data';
 import {getUserData} from './commons/utils/user-service';
 
 import Authentication from './authentication/authentication';
@@ -20,7 +19,7 @@ export default function() {
 		<Switch>
 			<PrivateRoute exact path='/' component={Dashboard} />
 			<PrivateRoute exact path='/contul-meu' component={Dashboard} />
-			<PrivateRoute exact path='/modificare-indecsi' component={Dashboard} />
+			<PrivateRoute exact path='/adaugare-indecsi' component={Dashboard} />
 			<PrivateRoute exact path='/guestbook' component={Dashboard} />
 			<Route component={() => (<div>404 - GTFO</div>)} />
 		</Switch>

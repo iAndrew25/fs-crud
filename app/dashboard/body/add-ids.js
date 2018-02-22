@@ -1,11 +1,10 @@
 import {getUser} from '../../commons/utils/user-data';
 import Modal from '../../commons/components/modal/modal';
 
-export default class Body extends React.Component {
+export default class AddIds extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: {},
 			openModal: false
 		}
 
@@ -13,15 +12,16 @@ export default class Body extends React.Component {
 		this.onSaveModal = this.onSaveModal.bind(this);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+/*	shouldComponentUpdate(nextProps, nextState) {
 		return nextProps.openModal !== nextState.openModal;
-	}
+	}*/
 
 	componentWillReceiveProps(nextProps) {
 		this.setState(nextProps);
 	}
 
 	componentDidMount() {
+		console.log('AddIds mounted');
 		this.setState(this.props);
 	}
 
@@ -36,17 +36,17 @@ export default class Body extends React.Component {
 	}
 
 	render() {
-		let {user: {email = '', name = ''}, openModal} = this.state,
-			{page = '/'} = this.props;
-		
+		let {openModal} = this.state,
+			{user: {name, email, ids}} = this.props;
+
 		return (
 			<div>
 				<button onClick={() => this.setState({openModal: true})}>click</button>
-				<div>You're on the {page} page</div>
+				<div>Hello, {name || 'unknown'}</div>
 				<Modal title="Titlu" open={openModal} onClose={this.onCloseModal} onSave={this.onSaveModal}>
 	
 					<div>
-						Hello, {name || 'unknown'}
+						Modal content
 					</div>
 
 	

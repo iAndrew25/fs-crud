@@ -1,12 +1,14 @@
 import {Redirect} from 'react-router-dom';
 import Header from './header/header';
-import Body from './body/body';
+
 import Overlay from './../commons/components/overlay/overlay';
+import AddIds from './body/add-ids';
+import Account from './body/account';
 
 import {getUserData} from './../commons/utils/user-service';
 import {logoutRedirect} from './../commons/utils/auth';
 import {isTokenSet} from './../commons/utils/tokens';
-import {getUser} from './../commons/utils/user-data';
+import {getUser, setUser} from './../commons/utils/user-data';
 
 export default class Dashboard extends React.Component {
 	constructor(props) {
@@ -16,27 +18,49 @@ export default class Dashboard extends React.Component {
 			forceLogout: false,
 			loading: true
 		}
+
+		this.renderPage = this.renderPage.bind(this);
 	}
 
 	componentDidMount() {
 		console.log("componentDidMount, Dashboard", this.props);
+		let {location: {pathname}} = this.props;
 		if(!getUser()) {
-			getUserData().then(({payload}) => this.setState({user: payload, loading: false}));
+			getUserData().then(({payload}) => {
+				this.setState({...payload, loading: false, pathname});
+				setUser(payload);
+			});
 		} else {
-			this.setState({user: getUser(), loading: false});
+			this.setState({...getUser(), loading: false, pathname});
+		}
+	}
+
+	renderPage() {
+		let {pathname = '/', email = '', name = '', phone = '', ids = {}} = this.state;
+		console.log('render page', this.state);
+
+		switch(pathname) {
+			case '/':
+			case '/contul-meu':
+				return <Account user={{email, name, phone}} />
+			case '/adaugare-indecsi':
+				return <AddIds user={{email, name, phone, ids}} />
+			case '/guestbook':
+				return <div>Chat</div>
+			default:
+				return null;
 		}
 	}
 
 	render() {
-		const {forceLogout, user, loading} = this.state,
-			{location: {pathname = ''}} = this.props;
+		const {forceLogout, loading, pathname} = this.state;
     	if(forceLogout) return <Redirect to='/' />
 
 		return (
 			<div className="dashboard">
 				{loading ? <Overlay /> : <div>
-					<Header logout={() => logoutRedirect(() => this.setState({forceLogout: true}))} />
-					<Body user={this.state.user} page={pathname} />
+					<Header logout={() => logoutRedirect(() => this.setState({forceLogout: true}))} pathname={pathname}/>
+					{this.renderPage()}
 				</div>}
 			</div>
 		)

@@ -33,7 +33,7 @@
 		global $con;
 		$userID = (int)$userID;
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, token FROM users WHERE id = $userID"), MYSQLI_ASSOC);
+		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, phone, token FROM users WHERE id = $userID"), MYSQLI_ASSOC);
 	}
 
 	function getUserByToken($token) {
