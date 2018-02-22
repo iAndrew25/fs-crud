@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom';
+
 export default function({logout}) {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -7,21 +9,23 @@ export default function({logout}) {
 			</button>
 
 			<div className="collapse navbar-collapse" id="navbarColor03">
-				<ul className="navbar-nav mr-auto">
-					<li className="nav-item active">
-					<a className="nav-link blind" href="#">Page 1</a>
-					</li>
-						<li className="nav-item">
-					<a className="nav-link blind" href="#">Page 2</a>
+				<div className="mr-auto"></div>
+				<div className="my-2 my-lg-0 blind" >
+					<ul className="navbar-nav mr-auto">
+						<li className="nav-item nav-link blind">
+							<Link to={`/contul-meu`}><span>Contul meu</span></Link>
 						</li>
-					<li className="nav-item">
-						<a className="nav-link blind" href="#">Page 3</a>
-					</li>
-					<li className="nav-item">
-						<a className="nav-link blind" href="#">Page 4</a>
-					</li>
-				</ul>
-				<div className="my-2 my-lg-0 blind" onClick={() => logout()}>Logout</div>
+						<li className="nav-item nav-link blind">
+							<Link to={`/modificare-indecsi`}><span>Modificare indecși</span></Link>
+						</li>
+						<li className="nav-item nav-link blind">
+							<Link to={`/guestbook`}><span>Guestbook</span></Link>
+						</li>
+						<li className="nav-item nav-link blind">
+							<span onClick={() => logout()}>Ieșire</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</nav>
 	)

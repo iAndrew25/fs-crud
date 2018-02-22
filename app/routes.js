@@ -19,7 +19,9 @@ export default function() {
 	return (
 		<Switch>
 			<PrivateRoute exact path='/' component={Dashboard} />
-			<Route exact path='/logout' component={() => logoutRedirect()} />			
+			<PrivateRoute exact path='/contul-meu' component={Dashboard} />
+			<PrivateRoute exact path='/modificare-indecsi' component={Dashboard} />
+			<PrivateRoute exact path='/guestbook' component={Dashboard} />
 			<Route component={() => (<div>404 - GTFO</div>)} />
 		</Switch>
 	)

@@ -1,5 +1,6 @@
 @import './authentication/authentication';
 @import './commons/components/overlay/overlay';
+@import './commons/components/modal/modal';
 
 .blind {
     -webkit-user-select: none;
@@ -7,6 +8,10 @@
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    
+    > a {
+    	text-decoration: none;
+    }
 }
 
 .dashboard {

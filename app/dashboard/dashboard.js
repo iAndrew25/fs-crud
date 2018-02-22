@@ -19,6 +19,7 @@ export default class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log("componentDidMount, Dashboard", this.props);
 		if(!getUser()) {
 			getUserData().then(({payload}) => this.setState({user: payload, loading: false}));
 		} else {
@@ -27,14 +28,15 @@ export default class Dashboard extends React.Component {
 	}
 
 	render() {
-		const {forceLogout, user, loading} = this.state;
+		const {forceLogout, user, loading} = this.state,
+			{location: {pathname = ''}} = this.props;
     	if(forceLogout) return <Redirect to='/' />
 
 		return (
 			<div className="dashboard">
 				{loading ? <Overlay /> : <div>
 					<Header logout={() => logoutRedirect(() => this.setState({forceLogout: true}))} />
-					<Body user={this.state.user} />
+					<Body user={this.state.user} page={pathname} />
 				</div>}
 			</div>
 		)

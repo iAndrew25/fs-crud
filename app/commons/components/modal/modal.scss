@@ -1,0 +1,17 @@
+#modal {
+	.modal {
+		&.open {
+			display: block;
+
+			&::before {
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				content: '';
+				position: fixed;
+				background: rgba(#000, .8);
+			}
+		}
+	}
+}
