@@ -1,0 +1,23 @@
+.authenticate-box {
+	width: 350px;
+	margin: 150px auto;
+	padding: 10px;
+
+	.btn-submit {
+		width: 100%;
+	}
+
+	.center-text {
+		text-align: center;
+	}
+
+	.forgot-password {
+		cursor: pointer;
+	}
+
+	.toggle-display {
+		text-align: right;
+		margin-top: 10px;
+		cursor: pointer;
+	}
+}
