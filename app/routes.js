@@ -18,6 +18,7 @@ export default function() {
 	return (
 		<Switch>
 			<PrivateRoute exact path='/' component={Dashboard} />
+			<PrivateRoute exact path='/init' component={Dashboard} />
 			<PrivateRoute exact path='/contul-meu' component={Dashboard} />
 			<PrivateRoute exact path='/indecsi' component={Dashboard} />
 			<PrivateRoute exact path='/guestbook' component={Dashboard} />

@@ -15,6 +15,6 @@ export const disableEditId = (date = new Date().getTime()) => {
 
 export const disableAddId = () => {
 	const today = new Date().getDate();
-	console.log("today", today);
+
 	return !(today < 25 && today > 20);
 }

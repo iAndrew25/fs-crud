@@ -19,7 +19,7 @@ export default function({logout}) {
 							<Link to={`/indecsi`}><span>Indecși</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
-							<Link to={`/guestbook`}><span>Guestbook</span></Link>
+							<Link to={`/init`}><span>Guestbook</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
 							<span onClick={() => logout()}>Ieșire</span>
