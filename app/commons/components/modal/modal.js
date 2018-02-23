@@ -16,7 +16,7 @@ export default function({title, open, children, onClose = () => {}, onSave = () 
 						{children}
 					</div>
 					<div className="modal-footer">
-						<button type="button" className="btn btn-primary" onClick={() => onSave()}>Save changes</button>
+						<button type="button" className="btn btn-primary" onClick={() => onSave()}>Salvează</button>
 					</div>
 				</div>
 			</div>

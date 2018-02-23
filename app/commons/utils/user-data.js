@@ -1,6 +1,6 @@
 let user = {
-	// email: 'a@a.a',
-	// name: 'Burebista'
+	email: 'a@a.a',
+	name: 'Burebista'
 };
 
 export const setUser = userData => user = userData;

@@ -2,7 +2,7 @@ import {Redirect} from 'react-router-dom';
 import Header from './header/header';
 
 import Overlay from './../commons/components/overlay/overlay';
-import AddIds from './body/add-ids';
+import Ids from './body/ids';
 import Account from './body/account';
 
 import {getUserData} from './../commons/utils/user-service';
@@ -43,8 +43,8 @@ export default class Dashboard extends React.Component {
 			case '/':
 			case '/contul-meu':
 				return <Account user={{email, name, phone}} />
-			case '/adaugare-indecsi':
-				return <AddIds user={{email, name, phone, ids}} />
+			case '/indecsi':
+				return <Ids user={{email, name, phone, ids}} />
 			case '/guestbook':
 				return <div>Chat</div>
 			default:

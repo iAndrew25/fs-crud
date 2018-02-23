@@ -3,15 +3,15 @@
 @import './commons/components/modal/modal';
 
 .blind {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    
-    > a {
-    	text-decoration: none;
-    }
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: pointer;
+	
+	> a {
+		text-decoration: none;
+	}
 }
 
 .btn-submit {
@@ -20,4 +20,14 @@
 
 .dashboard {
 	position: relative;
+}
+
+
+.container {
+	margin-top: 20px;
+
+	.add-ids-btn {
+		float: right;
+		margin: 10px 0;
+	}
 }

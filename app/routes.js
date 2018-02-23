@@ -12,14 +12,14 @@ export default function() {
 		console.log('private router accessed');
 
 		//request check if token is valid
-		return <Route {...rest} render={props => isTokenSet() ? <Component {...props} /> : <Authentication />} />
+		return <Route {...rest} render={props => true ? <Component {...props} /> : <Authentication />} />
 	}
 
 	return (
 		<Switch>
 			<PrivateRoute exact path='/' component={Dashboard} />
 			<PrivateRoute exact path='/contul-meu' component={Dashboard} />
-			<PrivateRoute exact path='/adaugare-indecsi' component={Dashboard} />
+			<PrivateRoute exact path='/indecsi' component={Dashboard} />
 			<PrivateRoute exact path='/guestbook' component={Dashboard} />
 			<Route component={() => (<div>404 - GTFO</div>)} />
 		</Switch>

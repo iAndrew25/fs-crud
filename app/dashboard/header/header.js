@@ -16,7 +16,7 @@ export default function({logout}) {
 							<Link to={`/contul-meu`}><span>Contul meu</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
-							<Link to={`/modificare-indecsi`}><span>Modificare indecși</span></Link>
+							<Link to={`/indecsi`}><span>Indecși</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
 							<Link to={`/guestbook`}><span>Guestbook</span></Link>
