@@ -5,6 +5,7 @@ export default class Account extends React.Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.getState = this.getState.bind(this);
+		this.resetState = this.resetState.bind(this);
 	}
 
 	handleChange(key, value) {
@@ -13,7 +14,23 @@ export default class Account extends React.Component {
 
 	componentDidMount() {
 		this.props.exposeApi({
-			getState: this.getState
+			getState: this.getState,
+			resetState: this.resetState
+		});
+	}
+
+	componentWillReceiveProps(props) {
+		this.setState(props.ids);
+	}
+
+	resetState() {
+		this.setState({
+			'ck': '',
+			'csb': '',
+			'cbb': '',
+			'hk': '',
+			'hsb': '',
+			'hbb': ''
 		})
 	}
 

@@ -33,19 +33,60 @@
 		global $con;
 		$userID = (int)$userID;
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, phone, token FROM users WHERE id = $userID"), MYSQLI_ASSOC);
+		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, phone, token, id FROM users WHERE id = $userID"), MYSQLI_ASSOC);
 	}
 
 	function getUserByToken($token) {
 		global $con;
 		$token = sanitize($token);
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name FROM users WHERE token = '$token'"), MYSQLI_ASSOC);
+		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, id FROM users WHERE token = '$token'"), MYSQLI_ASSOC);
+	}
+
+	function getIdsByToken($token) {
+		global $con;
+		$token = sanitize($token);
+		$userId = getUserByToken($token)['id'];
+
+		if(isset($userId)) {
+			$ids = array();
+			$result = mysqli_query($con, "SELECT * FROM user_ids WHERE user_id = $userId");
+			while($row = mysqli_fetch_array($result)) {
+				$ids[] = $row;
+			}
+
+			return $ids;
+		} else {
+			return false;
+		}
 	}
 
 	function sanitize($data) {
 		global $con;
 		return htmlspecialchars(mysqli_real_escape_string($con, $data));
+	}
+
+	function setIds($data) {
+		global $con;
+		// check if user id exists
+		$user_id = sanitize($data->user_id ?: 0);
+		$ck = sanitize($data->ck ?: null);
+		$csb = sanitize($data->csb ?: null);
+		$cbb = sanitize($data->cbb ?: null);
+		$hk = sanitize($data->hk ?: null);
+		$hsb = sanitize($data->hsb ?: null);
+		$hbb = sanitize($data->hbb ?: null);
+		$created_date = sanitize($data->created_date ?: 0);
+		$token = sanitize($data->token ?: false);
+		$mode = sanitize($data->mode);
+
+		if($mode == 'EDIT') {
+			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = $csb, cbb = $cbb, hk = $hk, hsb = $hsb, hbb = $hbb WHERE user_id = '$user_id' AND created_date = '$created_date'") ? true : false;
+		} else if($mode == 'ADD') {
+			return mysqli_query($con, "INSERT INTO user_ids(user_id, ck, csb, cbb, hk, hsb, hbb, created_date) VALUES('$user_id', '$ck', '$csb', '$cbb', '$hk', '$hsb', '$hbb', '$created_date')") ? true : false;
+		} else {
+			return false;
+		}
 	}
 
 	function setResult($success, $message, $payload) {
@@ -59,5 +100,4 @@
 	function generateRandomString() {
 		return bin2hex(random_bytes(5));
 	}
-
 ?>

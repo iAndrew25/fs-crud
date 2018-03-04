@@ -1,17 +1,10 @@
 import {getUser} from '../../commons/utils/user-data';
+import {getUserIds, setUserIds} from './ids-service';
 import Modal from '../../commons/components/modal/modal';
+import {getToken} from '../../commons/utils/tokens';
 import UsersTable from './users-table/users-table';
 import AddIds from './add-ids/add-ids';
-const userIds = [{"ck":23,"csb":24,"cbb":43,"hk":55,"hsb":18,"hbb":67,"date":1251389303788},
-	{"ck":80,"csb":45,"cbb":46,"hk":88,"hsb":48,"hbb":97,"date":1150209682260},
-	{"ck":56,"csb":88,"cbb":11,"hk":52,"hsb":58,"hbb":59,"date":1521269743812},
-	{"ck":41,"csb":98,"cbb":70,"hk":8,"hsb":40,"hbb":86,"date":1203351207145},
-	{"ck":12,"csb":93,"cbb":4,"hk":76,"hsb":96,"hbb":77,"date":1827639424443},
-	{"ck":26,"csb":31,"cbb":72,"hk":5,"hsb":80,"hbb":26,"date":1158100696468},
-	{"ck":58,"csb":88,"cbb":29,"hk":61,"hsb":75,"hbb":77,"date":1587226487345},
-	{"ck":59,"csb":26,"cbb":91,"hk":73,"hsb":38,"hbb":21,"date":1811981925498},
-	{"ck":53,"csb":72,"cbb":75,"hk":89,"hsb":60,"hbb":63,"date":1509892124437},
-	{"ck":50,"csb":7,"cbb":34,"hk":97,"hsb":49,"hbb":74,"date":1764677890320}]
+
 export default class Ids extends React.Component {
 	constructor(props) {
 		super(props);
@@ -31,37 +24,63 @@ export default class Ids extends React.Component {
 
 	componentDidMount() {
 		console.log('AddIds mounted');
+		getUserIds().then(({success, payload}) => {
+			if(success) {
+				this.setState({userIds: payload});
+			} else {
+				console.error('Error fetching user ids.');
+			}
+		});
 		this.setState(this.props);
 	}
 
 	onCloseModal() {
-		this.setState({showModal: false});
-		console.log('Closing modal');
+		this.setState({showModal: false}, () => this.addIdsApi.resetState());
 	}
 
-	onSaveModal() {
-		console.log('done', this.addIdsApi.getState());
-		this.onCloseModal();
+	async onSaveModal() {
+		let {ck = null, csb = null, cbb = null, hk = null, hsb = null, hbb = null} = this.addIdsApi.getState(),
+			{created_date} = this.state,
+			user_id = getUser().id,
+			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, user_id, token: getToken(), mode: this.state.modalMode});
+
+		if(setIdsResp.success) {
+			let getIdsResp = await getUserIds();
+			if(getIdsResp.success) {
+				this.setState({userIds: getIdsResp.payload});
+				this.onCloseModal();
+			} else {
+				console.error('Error fetching user ids.');
+			}
+		} else {
+			console.error('Error setting user ids.');
+		}
 	}
 
 	getAddIdsApi(api) {
 		this.addIdsApi = api;
 	}
 
-	openModal() {
-		this.setState({showModal: true});
+	openModal(mode = 'ADD', created_date = new Date().getTime(), ids = {}) {
+		this.setState({
+			showModal: true,
+			modalMode: mode,
+			modalTitle: mode === 'ADD' ? 'Adaugă indecși' : 'Modifică indecși',
+			created_date,
+			ids
+		});
 	}
 
 	render() {
-		let {showModal} = this.state;
+		let {showModal, modalTitle, userIds = [], ids = {}} = this.state;
 
 		return (
 			<div>
-				<UsersTable userIds={userIds} openModal={this.openModal} disableAddIds={true}/>
+				<UsersTable userIds={userIds} openModal={this.openModal} />
 
-				<Modal title="Adaugă indecși" open={showModal} onClose={this.onCloseModal} onSave={this.onSaveModal}>
-					<AddIds exposeApi={this.getAddIdsApi}/>
-				</Modal>				
+				<Modal title={modalTitle} open={showModal} onClose={this.onCloseModal} onSave={this.onSaveModal}>
+					<AddIds exposeApi={this.getAddIdsApi} ids={ids} />
+				</Modal>
 			</div>
 		)		
 	}

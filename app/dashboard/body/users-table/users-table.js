@@ -1,10 +1,11 @@
-import {toMMMMYYYY, disableEditId, disableAddId} from '../../../commons/utils/tools';
+import {toMMMMYYYY, disableEditId, disableAddId, sortByDate} from '../../../commons/utils/tools';
 
-export default function({userIds = [], disableAddIds = false, openModal = () => {}}) {
-    console.log("user", userIds);
+export default function({userIds = [], openModal = () => {}}) {
+	let sortedIds = sortByDate(userIds);
+	
 	return(
 		<div className="container">
-			<button type="button" className="btn btn-outline-primary add-ids-btn" disabled={disableAddId()} onClick={() => openModal()}>Adaugă indecși</button>
+			<button type="button" className="btn btn-outline-primary add-ids-btn" disabled={disableAddId()} onClick={() => openModal('ADD')}>Adaugă indecși</button>
 			<table className="table table-hover">
 				<thead>
 					<tr>
@@ -23,9 +24,9 @@ export default function({userIds = [], disableAddIds = false, openModal = () => 
 					</tr>
 				</thead>
 				<tbody>
-					{userIds.map(({date, ck, csb, cbb, hk, hsb, hbb}) => (
-						<tr key={date}>
-							<th>{toMMMMYYYY(date)}</th>
+					{sortedIds.map(({created_date, ck, csb, cbb, hk, hsb, hbb}) => (
+						<tr key={created_date}>
+							<th>{toMMMMYYYY(created_date)}</th>
 							<td>{hk}</td>
 							<td>{hsb}</td>
 							<td>{hbb}</td>
@@ -33,7 +34,7 @@ export default function({userIds = [], disableAddIds = false, openModal = () => 
 							<td>{csb}</td>
 							<td>{cbb}</td>
 							<td>
-								<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(date)} onClick={() => console.log('remove')}>Modifică</button>
+								<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {ck, csb, cbb, hk, hsb, hbb})}>Modifică</button>
 							</td>
 						</tr>
 					))}

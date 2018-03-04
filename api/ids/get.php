@@ -2,13 +2,13 @@
 	require_once("./../database/connect.php");
 	require_once("./../utils.php");
 
-	if(isset($_GET["tokenId"])) {
-		$tokenId = $_GET["tokenId"];
-		$userData = getUserByToken($tokenId);
+	$tokenId = $_GET["tokenId"];
+	if(isset($tokenId)) {
+		$userIds = getIdsByToken($tokenId);
 
-		if(isset($userData)) {
+		if(isset($userIds)) {
 			http_response_code(200);
-			echo json_encode(setResult(true, 'Success!', $userData));
+			echo json_encode(setResult(true, 'Success!', $userIds));
 		} else {
 			http_response_code(500);
 			echo json_encode(setResult(false, 'Something happened.', null));

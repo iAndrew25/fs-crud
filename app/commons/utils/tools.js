@@ -10,11 +10,15 @@ export const disableEditId = (date = new Date().getTime()) => {
 	const now = new Date().getTime(),
 		interval = 1000 * 60 * 60 * 24 * 7;
 
+	return false;
 	return !(now > date && now < date + interval);
 }
 
 export const disableAddId = () => {
 	const today = new Date().getDate();
 
+	return false;
 	return !(today < 25 && today > 20);
 }
+
+export const sortByDate = (arr = []) => arr.sort((a, b) => b.created_date - a.created_date);

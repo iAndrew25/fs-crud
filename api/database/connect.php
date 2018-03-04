@@ -2,7 +2,7 @@
 	global $con;
 	$USERNAME = "root";
 	$PASSWORD = "";
-	$DATABASE = "labloc"
+	$DATABASE = "labloc";
 
 	$con = mysqli_connect("localhost", $USERNAME, $PASSWORD, $DATABASE);
 
