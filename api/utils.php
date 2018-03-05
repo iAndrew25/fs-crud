@@ -77,15 +77,37 @@
 		$hsb = sanitize($data->hsb ?: null);
 		$hbb = sanitize($data->hbb ?: null);
 		$created_date = sanitize($data->created_date ?: 0);
-		$token = sanitize($data->token ?: false);
 		$mode = sanitize($data->mode);
 
 		if($mode == 'EDIT') {
-			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = $csb, cbb = $cbb, hk = $hk, hsb = $hsb, hbb = $hbb WHERE user_id = '$user_id' AND created_date = '$created_date'") ? true : false;
+			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE user_id = '$user_id' AND created_date = '$created_date'") ? true : false;
 		} else if($mode == 'ADD') {
 			return mysqli_query($con, "INSERT INTO user_ids(user_id, ck, csb, cbb, hk, hsb, hbb, created_date) VALUES('$user_id', '$ck', '$csb', '$cbb', '$hk', '$hsb', '$hbb', '$created_date')") ? true : false;
 		} else {
 			return false;
+		}
+	}
+
+	function setUser($user) {
+		global $con;
+
+		$user_id = sanitize($user->id ?: 0);
+		$name = sanitize($user->name ?: 0);
+		$phone = sanitize($user->phone ?: 0);
+		$email = sanitize($user->email ?: 0);
+		$password = sanitize($user->password ?: 0);
+		$mode = sanitize($user->mode ?: 0);
+
+		if($mode == 'FIRST_LOG') {
+			return mysqli_query($con, "UPDATE users SET name = '$name', phone = '$phone', email = '$email', password = '$password' WHERE id = '$user_id'") ? true : false;
+		} else {
+			if($mode == 'CHANGE_INFO') {
+				return mysqli_query($con, "UPDATE users SET phone = '$phone', email = '$email' WHERE id = '$user_id'") ? true : false;
+			} else if($mode == 'CHANGE_PASSWORD') {
+				return mysqli_query($con, "UPDATE users SET phone = '$phone', email = '$email', password = '$password' WHERE id = '$user_id'") ? true : false;		
+			} else {
+				return false;
+			}
 		}
 	}
 

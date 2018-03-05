@@ -1,4 +1,5 @@
 import {getUser} from '../../commons/utils/user-data';
+import {setUserData} from '../../commons/utils/user-service';
 
 export default class Account extends React.Component {
 	constructor(props) {
@@ -6,14 +7,15 @@ export default class Account extends React.Component {
 		this.state = {}
 
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	componentDidMount() {
-		if(this.props.firstLog === true) return;
+		//if(this.props.firstLog === true) return;
 		const userData = getUser();
 		if(userData) {
-			const {email = '', name = '', phone = ''} = userData;
-			this.setState({email, name, phone});
+			const {email = '', name = '', phone = '', id = ''} = userData;
+			this.setState({email, name, phone, id});
 		} else {
 			console.error('NO USER FOUND');
 		}
@@ -21,6 +23,25 @@ export default class Account extends React.Component {
 
 	handleChange(key, value) {
 		this.setState({[key]: value});
+	}
+
+	handleSubmit() {
+		console.log('submit');
+		let {name = '', phone = '', email = '', password = '', id = ''} = this.state;
+
+		if(name && phone && email) {
+			if(this.props.firstLog) {
+				setUserData({name, phone, email, password, id, mode: 'FIRST_LOG'});
+			} else {
+				if(password !== '') {
+					setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'});
+				} else {
+					setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'});
+				}
+			}			
+		} else {
+			console.log('no e p e')
+		}
 	}
 
 	render() {
@@ -53,7 +74,7 @@ export default class Account extends React.Component {
 						<input type="password" className="form-control" id="account-password" value={password} onChange={e => this.handleChange('password', e.target.value)} />
 						<small className="form-text text-muted forgot-password">Câmpurile marcate cu * sunt obligatorii</small>
 					</div>
-					<button className="btn btn-primary btn-submit">{firstLog ? 'Salvează' : 'Schimbă'}</button>
+					<button className="btn btn-primary btn-submit" onClick={() => this.handleSubmit()}>{firstLog ? 'Salvează' : 'Schimbă'}</button>
 				</div>
 			</div>
 		)		

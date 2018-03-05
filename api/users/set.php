@@ -5,7 +5,7 @@
 	$request_body = file_get_contents('php://input');
 	if(isset($request_body)) {
 		$data = json_decode($request_body);
-		$response = setIds($data);
+		$response = setUser($data);
 
 		if($response) {
 			http_response_code(200);
