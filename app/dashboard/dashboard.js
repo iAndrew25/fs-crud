@@ -48,8 +48,6 @@ export default class Dashboard extends React.Component {
 				return <Ids user={{email, name, phone, ids}} />
 			case '/guestbook':
 				return <div>Chat</div>
-			// case '/init':
-			// 	return <Account firstLog={firstLog} />
 			default:
 				return null;
 		}
