@@ -14,8 +14,9 @@ export default function() {
 
 		console.log('private router accessed', isTokenSet());
 		if(init) {
-			const {id} = getUser();
-			return <Route {...rest} render={props => id ? <Component {...props} /> : <Authentication />} />
+			const {id, email} = getUser();
+			console.log("getUser", getUser());
+			return <Route {...rest} render={props => (id && !email) ? <Component {...props} /> : <Authentication />} />
 		} else {
 			//request check if token is valid
 			return <Route {...rest} render={props => isTokenSet() ? <Component {...props} /> : <Authentication />} />

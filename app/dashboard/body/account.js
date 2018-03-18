@@ -13,7 +13,10 @@ export default class Account extends React.Component {
 
 	componentDidMount() {
 		console.log("this.props.firstLog", this.props.firstLog);
-		if(this.props.firstLog === true) return;
+		if(this.props.firstLog === true) {
+			this.setState(getUser())
+			return;
+		}
 		const userData = getUser();
 		if(userData) {
 			const {email = '', name = '', phone = '', id = ''} = userData;
@@ -32,13 +35,12 @@ export default class Account extends React.Component {
 	}
 
 	handleSubmit() {
-		let {name = '', phone = '', email = '', password = '', id = ''} = this.state;
-
+		const {name = '', phone = '', email = '', password = '', id = ''} = this.state;
 		console.log("this.state", this.state);
 		console.log("this.props", this.props);
 
 		if(this.props.firstLog && password && name && phone && email) {
-			setUserData({name, phone, email, password, id: getUser().id, mode: 'FIRST_LOG'}).then(({success}) => this.setState({success}));
+			setUserData({name, phone, email, password, id, mode: 'FIRST_LOG'}).then(({success}) => this.setState({success}));
 		} else if(name && phone && email) {
 			if(password !== '') {
 				setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'}).then(({success}) => this.setState({success}));
