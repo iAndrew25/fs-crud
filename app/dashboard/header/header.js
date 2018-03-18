@@ -2,8 +2,10 @@ import {Link} from 'react-router-dom';
 
 export default function({logout}) {
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			<a className="navbar-brand" href="#">Dashboard</a>
+		<nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+			<div className="navbar-brand">
+				<img src="logo.png" class="logo" />
+			</div>
 			<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
 				<span className="navbar-toggler-icon"></span>
 			</button>
@@ -13,16 +15,16 @@ export default function({logout}) {
 				<div className="my-2 my-lg-0 blind" >
 					<ul className="navbar-nav mr-auto">
 						<li className="nav-item nav-link blind">
-							<Link to={`/contul-meu`}><span>Contul meu</span></Link>
+							<Link to="/contul-meu"><span>Contul meu</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
-							<Link to={`/indecsi`}><span>Indecși</span></Link>
+							<Link to="/indecsi"><span>Indecși</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
-							<Link to={`/guestbook`}><span>Guestbook</span></Link>
+							<Link to="/guestbook"><span>Guestbook</span></Link>
 						</li>
 						<li className="nav-item nav-link blind">
-							<span onClick={() => logout()}>Ieșire</span>
+							<Link to="/"><span onClick={() => logout()}>Ieșire</span></Link>
 						</li>
 					</ul>
 				</div>

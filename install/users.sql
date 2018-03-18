@@ -19,5 +19,5 @@ CREATE TABLE user_ids (
 	hk INT,
 	hsb INT,
 	hbb INT,
-	created_date INT
+	created_date BIGINT
 )

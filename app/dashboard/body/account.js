@@ -39,16 +39,20 @@ export default class Account extends React.Component {
 		console.log("this.state", this.state);
 		console.log("this.props", this.props);
 
-		if(this.props.firstLog && password && name && phone && email) {
-			setUserData({name, phone, email, password, id, mode: 'FIRST_LOG'}).then(({success}) => this.setState({success}));
-		} else if(name && phone && email) {
-			if(password !== '') {
-				setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'}).then(({success}) => this.setState({success}));
-			} else {
-				setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'}).then(({success}) => this.setState({success}));
+		if(this.props.firstLog) {
+			if(password && name && phone && email) {
+				setUserData({name, phone, email, password, id, mode: 'FIRST_LOG'}).then(({success}) => this.setState({success}));
 			}
-		} else {
-			console.log('no e p e');
+		} else  {
+			if(name && phone && email) {
+				if(password !== '') {
+					setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'}).then(({success}) => this.setState({success}));
+				} else {
+					setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'}).then(({success}) => this.setState({success}));
+				}
+			} else {
+				console.log('no e p e');
+			}			
 		}
 	}
 
