@@ -25,19 +25,20 @@ export default class Dashboard extends React.Component {
 	componentDidMount() {
 		console.log("componentDidMount, Dashboard", this.props);
 		let {location: {pathname}} = this.props;
+			console.log("getUser", getUser());
 		if(!getUser()) {
 			getUserData().then(({payload}) => {
-				this.setState({...payload, loading: false, pathname});
+				console.log("payload", payload);
+				this.setState({...payload, firstlog: !!!payload.email, loading: false, pathname});
 				setUser(payload);
 			});
 		} else {
-			this.setState({...getUser(), loading: false, pathname});
+			this.setState({...getUser(), firstlog: false, loading: false, pathname});
 		}
 	}
 
 	renderPage() {
-		let {pathname = '/', email = '', name = '', phone = '', ids = {}} = this.state;
-		console.log('render page', this.state);
+		let {pathname = '/', email = '', name = '', phone = '', ids = {}, firstLog} = this.state;
 
 		switch(pathname) {
 			case '/':
@@ -47,8 +48,8 @@ export default class Dashboard extends React.Component {
 				return <Ids user={{email, name, phone, ids}} />
 			case '/guestbook':
 				return <div>Chat</div>
-			case '/init':
-				return <Account firstLog={true} />
+			// case '/init':
+			// 	return <Account firstLog={firstLog} />
 			default:
 				return null;
 		}

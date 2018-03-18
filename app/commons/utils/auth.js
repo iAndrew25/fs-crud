@@ -6,6 +6,8 @@ export const logoutRedirect = (callback = () => {}) => {
 }
 
 export const loginRedirect = (token = '', callback = () => {}) => {
-	setToken(token);
-	callback();
+	if(token) {
+		setToken(token);
+		callback();
+	}
 }

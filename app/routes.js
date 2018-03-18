@@ -5,20 +5,21 @@ import {getUserData} from './commons/utils/user-service';
 
 import Authentication from './authentication/authentication';
 import Dashboard from './dashboard/dashboard';
+import Init from './dashboard/init';
 
 export default function() {
 
 	const PrivateRoute = ({component: Component, ...rest}) => {
-		console.log('private router accessed');
+		console.log('private router accessed', isTokenSet());
 
 		//request check if token is valid
-		return <Route {...rest} render={props => true ? <Component {...props} /> : <Authentication />} />
+		return <Route {...rest} render={props => isTokenSet() ? <Component {...props} /> : <Authentication />} />
 	}
 
 	return (
 		<Switch>
+			<Route exact path='/init' component={Init} />
 			<PrivateRoute exact path='/' component={Dashboard} />
-			<PrivateRoute exact path='/init' component={Dashboard} />
 			<PrivateRoute exact path='/contul-meu' component={Dashboard} />
 			<PrivateRoute exact path='/indecsi' component={Dashboard} />
 			<PrivateRoute exact path='/guestbook' component={Dashboard} />

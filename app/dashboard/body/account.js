@@ -1,5 +1,6 @@
-import {getUser} from '../../commons/utils/user-data';
-import {setUserData} from '../../commons/utils/user-service';
+import {getUser, setUser} from '../../commons/utils/user-data';
+import {setUserData, getUserData} from '../../commons/utils/user-service';
+import {Redirect} from 'react-router-dom';
 
 export default class Account extends React.Component {
 	constructor(props) {
@@ -11,13 +12,18 @@ export default class Account extends React.Component {
 	}
 
 	componentDidMount() {
-		//if(this.props.firstLog === true) return;
+		console.log("this.props.firstLog", this.props.firstLog);
+		if(this.props.firstLog === true) return;
 		const userData = getUser();
 		if(userData) {
 			const {email = '', name = '', phone = '', id = ''} = userData;
 			this.setState({email, name, phone, id});
 		} else {
-			console.error('NO USER FOUND');
+			getUserData().then(({payload}) => {
+				const {email = '', name = '', phone = '', id = ''} = payload;
+				this.setState({email, name, phone, id});
+				setUser(payload);
+			});
 		}
 	}
 
@@ -26,27 +32,31 @@ export default class Account extends React.Component {
 	}
 
 	handleSubmit() {
-		console.log('submit');
 		let {name = '', phone = '', email = '', password = '', id = ''} = this.state;
 
-		if(name && phone && email) {
-			if(this.props.firstLog) {
-				setUserData({name, phone, email, password, id, mode: 'FIRST_LOG'});
+		console.log("this.state", this.state);
+		console.log("this.props", this.props);
+
+		if(this.props.firstLog && password && name && phone && email) {
+			setUserData({name, phone, email, password, id: getUser().id, mode: 'FIRST_LOG'}).then(({success}) => this.setState({success}));
+		} else if(name && phone && email) {
+			if(password !== '') {
+				setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'}).then(({success}) => this.setState({success}));
 			} else {
-				if(password !== '') {
-					setUserData({name, phone, email, password, id, mode: 'CHANGE_PASSWORD'});
-				} else {
-					setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'});
-				}
-			}			
+				setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'}).then(({success}) => this.setState({success}));
+			}
 		} else {
-			console.log('no e p e')
+			console.log('no e p e');
 		}
 	}
 
 	render() {
-		const {email, name, phone, password} = this.state,
+		const {email, name, phone, password, success} = this.state,
 			{firstLog} = this.props;
+
+		if(firstLog && success) {
+			return <Redirect to='/' />
+		}
 
 		return (
 			<div className="card border-primary mb-3" style={{maxWidth: '20rem', margin: '50px auto'}}>
@@ -55,9 +65,10 @@ export default class Account extends React.Component {
 				</div>
 				<div className="card-body">
 					{firstLog && <h4 className="card-title text-center">Completează câmpurile de mai jos cu informații despre tine. :-)</h4>}
+					{success && <div className="alert alert-success">Informațiile au fost salvate.</div>}
 					<div className="form-group">
 						<label htmlFor="account-name">Nume {firstLog && '*'}</label>
-						<input type="text" className="form-control" id="account-name" value={name} readOnly={!firstLog} />
+						<input type="text" className="form-control" id="account-name" value={name} onChange={e => this.handleChange('name', e.target.value)} readOnly={!firstLog} />
 					</div>
 					<div className="form-group">
 						<label htmlFor="account-phone">Număr de telefon *</label>
