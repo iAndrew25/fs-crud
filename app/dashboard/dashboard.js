@@ -7,7 +7,7 @@ import Account from './body/account';
 
 import {getUserData} from './../commons/utils/user-service';
 import {logoutRedirect} from './../commons/utils/auth';
-import {isTokenSet} from './../commons/utils/tokens';
+import {isTokenSet, removeToken} from './../commons/utils/tokens';
 import {getUser, setUser} from './../commons/utils/user-data';
 
 export default class Dashboard extends React.Component {
@@ -29,9 +29,14 @@ export default class Dashboard extends React.Component {
 		if(!getUser()) {
 			getUserData().then(({payload}) => {
 				console.log("payload", payload);
-				this.setState({...payload, firstlog: !!!payload.email, loading: false, pathname});
+				this.setState({...payload, firstlog: !!!payload.email, pathname});
 				setUser(payload);
-			});
+			})
+			.catch(e => {
+				removeToken();
+				this.setState({forceLogout: true});
+			})
+			.finally(() => this.setState({loading: false}));
 		} else {
 			this.setState({...getUser(), firstlog: false, loading: false, pathname});
 		}

@@ -3,7 +3,7 @@ export default function({email, password, handleChange, handleLogin, toggleDispl
 
 	return(
 		<div>
-			<h1 className="center-text">Loghează-te</h1>
+			<h1 className="center-text">Accesează-ți contul</h1>
 			{message && <div className="alert alert-dismissible alert-danger">{message}</div>}
 			<div className="form-group">
 				<label htmlFor="login-email">Adresa de e-mail/Numele de utilizator</label>
@@ -14,7 +14,7 @@ export default function({email, password, handleChange, handleLogin, toggleDispl
 				<input type="password" className="form-control" id="login-password" placeholder="Password" value={password} onChange={e => handleChange('password', e.target.value)}/>
 				<small className="form-text text-muted forgot-password">Am uitat parola.</small>
 			</div>
-			<button className="btn btn-primary btn-submit" onClick={() => handleLogin()}>Loghează-te</button>
+			<button className="btn btn-primary btn-submit" onClick={() => handleLogin()}>Intră în cont</button>
 		</div>
 	)
 }
