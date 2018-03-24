@@ -83,6 +83,16 @@
 		}
 	}
 
+	function changePasword($email) {
+		global $con;
+
+		$email = sanitize($email ?: null);
+		$newPass = generateRandomString();
+		$encryptedPass = md5($newPass);
+
+		return mysqli_query($con, "UPDATE users SET password = '$encryptedPass' WHERE email = '$email'") ? $newPass : false;
+	}
+
 	function setUser($user) {
 		global $con;
 

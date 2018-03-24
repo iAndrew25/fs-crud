@@ -1,5 +1,6 @@
 import Login from './log-in/log-in';
-import {login} from './authentication-service';
+import LostPassword from './lost-password/lost-password';
+import {login, lostPassword} from './authentication-service';
 import {Redirect} from 'react-router-dom';
 import {loginRedirect} from '../commons/utils/auth';
 import {setUser} from '../commons/utils/user-data';
@@ -11,15 +12,18 @@ export default class Authentication extends React.Component {
 			email: '',
 			password: '',
 			name: '',
-			forceRedirect: false
+			forceRedirect: false,
+			lostPassword: false,
 		}
 
 		this.handleChange = this.handleChange.bind(this);
-		this.handleLogin = this.handleLogin.bind(this)
+		this.handleLogin = this.handleLogin.bind(this);
+		this.handleLostPass = this.handleLostPass.bind(this);
+		this.toggleComponentDisplay = this.toggleComponentDisplay.bind(this);
 	}
 
 	handleLogin() {
-		let {email, password} = this.state;
+		const {email, password} = this.state;
 		login(email, password).then(({payload}) => {
 			setUser(payload);
 			if(payload.email) {
@@ -31,14 +35,40 @@ export default class Authentication extends React.Component {
 		.catch(loginResp => this.setState({loginResp}));
 	}
 
+	toggleComponentDisplay() {
+		this.setState(prevState => ({lostPassword: !prevState.lostPassword, lostPassResp: {}, email: ''}));
+	}
+
 	handleChange(key, value) {
 		this.setState({[key]: value});
 	}
 
+	handleLostPass() {
+		const {email} = this.state;
+		lostPassword(email)
+			.then(({message, success}) => {
+				this.setState({
+					lostPassResp: {
+						message,
+						success
+					},
+					email: ''
+				})
+			})
+			.catch(({message, success}) => {
+				this.setState({
+					lostPassResp: {
+						message,
+						success
+					},
+					email: ''
+				})			
+			})
+	}
+ 
 	render() {
-		let {email, password, forceRedirect, loginResp} = this.state;
+		const {email, password, forceRedirect, loginResp, lostPassword, lostPassResp = {}} = this.state;
 
-			console.log("forceRedirect", forceRedirect);
 		if(forceRedirect === 'DASHBOARD') {
 			return <Redirect to='/' />
 		} else if(forceRedirect === 'INIT') {
@@ -48,12 +78,20 @@ export default class Authentication extends React.Component {
 		return(
 			<div className="card border-primary authenticate-box">
 				<div className="card-body text-primary">
-					<Login 
+					{lostPassword ? <LostPassword 
+						email={email}
+						toggleComponentDisplay={this.toggleComponentDisplay}
+						handleChange={this.handleChange}
+						lostPassResp={lostPassResp}
+						handleLostPass={this.handleLostPass} />
+					: <Login 
 						email={email}
 						password={password}
+						toggleComponentDisplay={this.toggleComponentDisplay}
 						handleLogin={this.handleLogin}
 						loginResp={loginResp}
 						handleChange={this.handleChange} />
+					}
 					{this.state.toLogin ? <Redirect to="/dashboard" /> : ''}
 				</div>
 			</div>

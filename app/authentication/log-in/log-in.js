@@ -1,4 +1,4 @@
-export default function({email, password, handleChange, handleLogin, toggleDisplay, loginResp = {}}) {
+export default function({email, password, handleChange, handleLogin, toggleComponentDisplay, loginResp = {}}) {
 	let {message} = loginResp;
 
 	return(
@@ -12,7 +12,7 @@ export default function({email, password, handleChange, handleLogin, toggleDispl
 			<div className="form-group">
 				<label htmlFor="login-password">Parola</label>
 				<input type="password" className="form-control" id="login-password" placeholder="Password" value={password} onChange={e => handleChange('password', e.target.value)}/>
-				<small className="form-text text-muted forgot-password">Am uitat parola.</small>
+				<small className="form-text text-muted forgot-password" onClick={() => toggleComponentDisplay()}>Am uitat parola.</small>
 			</div>
 			<button className="btn btn-primary btn-submit" onClick={() => handleLogin()}>Intră în cont</button>
 		</div>
