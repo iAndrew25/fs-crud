@@ -5,11 +5,12 @@ export default function({userIds = [], openModal = () => {}}) {
 	
 	return(
 		<div className="container">
-			<button type="button" className="btn btn-outline-primary add-ids-btn" disabled={disableAddId()} onClick={() => openModal('ADD')}>Adaugă indecși</button>
+			months
 			<table className="table table-hover">
 				<thead>
 					<tr>
-						<th className="text-center" scope="col" rowSpan="2">Luna</th>
+						<th className="text-center" scope="col" rowSpan="2">Apartament</th>
+						<th className="text-center" scope="col" rowSpan="2">Centrală proprie</th>
 						<th className="text-center" scope="col" colSpan="3">Indecși apă caldă</th>
 						<th className="text-center" scope="col" colSpan="3">Indecși apă rece</th>
 						<th className="text-center" scope="col" rowSpan="2">Acțiuni</th>
@@ -24,9 +25,10 @@ export default function({userIds = [], openModal = () => {}}) {
 					</tr>
 				</thead>
 				<tbody>
-					{sortedIds.map(({created_date, ck, csb, cbb, hk, hsb, hbb}) => (
+					{sortedIds.map(({flat, boiler, created_date, ck, csb, cbb, hk, hsb, hbb}) => (
 						<tr key={created_date}>
-							<th>{toMMMMYYYY(created_date)}</th>
+							<td>{flat}</td>
+							<td>{parseInt(boiler) ? 'Da' : 'Nu'}</td>
 							<td>{hk}</td>
 							<td>{hsb}</td>
 							<td>{hbb}</td>

@@ -1,8 +1,10 @@
 import {getUser} from '../../commons/utils/user-data';
 import {getUserIds, setUserIds} from './ids-service';
+import {getAllUsersData} from '../../commons/utils/user-service';
 import Modal from '../../commons/components/modal/modal';
 import {getToken} from '../../commons/utils/tokens';
 import UsersTable from './users-table/users-table';
+import AdminTable from './users-table/admin-table';
 import AddIds from './add-ids/add-ids';
 
 export default class Ids extends React.Component {
@@ -23,13 +25,26 @@ export default class Ids extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState(getUser());
-		getUserIds().then(({success, payload}) => {
-			if(success) {
-				this.setState({userIds: payload});
+		this.setState(getUser(), () => {
+			if(this.state.role === 'USER') {
+				getUserIds().then(({success, payload}) => {
+					if(success) {
+						this.setState({userIds: payload});
+					} else {
+						console.error('USER: Error fetching user ids.');
+					}
+				});
+			} else if(this.state.role === 'ADMIN') {
+				getAllUsersData().then(({success, payload}) => {
+					if(success) {
+						this.setState({userIds: payload});
+					} else {
+						console.error('ADMIN: Error fetching user ids.');
+					}
+				});					
 			} else {
-				console.error('Error fetching user ids.');
-			}
+				console.error('NO ROLE SPECIFIED');
+			}			
 		});
 	}
 
@@ -75,8 +90,11 @@ export default class Ids extends React.Component {
 
 		return (
 			<div>
-				<UsersTable userIds={userIds} openModal={this.openModal} />
-
+				{this.state.role === 'ADMIN' 
+					? <AdminTable userIds={userIds} openModal={this.openModal} />
+					: <UsersTable userIds={userIds} openModal={this.openModal} />}
+				
+				
 				<Modal title={modalTitle} open={showModal} onClose={this.onCloseModal} onSave={this.onSaveModal}>
 					<AddIds exposeApi={this.getAddIdsApi} ids={ids} />
 				</Modal>
