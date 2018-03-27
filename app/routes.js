@@ -11,8 +11,6 @@ import Init from './dashboard/init';
 export default function() {
 
 	const PrivateRoute = ({component: Component, init, ...rest}) => {
-
-		console.log('private router accessed', isTokenSet());
 		if(init) {
 			const {id, email} = getUser();
 			console.log("getUser", getUser());

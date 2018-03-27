@@ -3,6 +3,7 @@ import Header from './header/header';
 
 import Overlay from './../commons/components/overlay/overlay';
 import Ids from './body/ids';
+import AdminIds from './body/admin-ids';
 import Account from './body/account';
 
 import {getUserData, getAllUsersData} from './../commons/utils/user-service';
@@ -50,7 +51,11 @@ export default class Dashboard extends React.Component {
 			case '/contul-meu':
 				return <Account />
 			case '/indecsi':
-				return <Ids />
+				if(this.state.role === 'ADMIN') {
+					return <AdminIds />
+				} else {
+					return <Ids />
+				}
 			case '/guestbook':
 				return <div>Chat</div>
 			default:
