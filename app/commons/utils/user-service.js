@@ -7,6 +7,12 @@ export function getUserData() {
 	});
 }
 
+export function getAllUsersData() {
+	return fetch(`/users/get-all.php?tokenId=${getToken()}`, {
+		method: 'GET'
+	});
+}
+
 export function setUserData({name, email, password, phone, id, mode}) {
 	return fetch(`/users/set.php?tokenId=${getToken()}`, {
 		method: 'POST',

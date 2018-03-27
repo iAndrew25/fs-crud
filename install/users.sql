@@ -7,6 +7,7 @@ CREATE TABLE users (
 	token VARCHAR(160),
 	phone VARCHAR(160),
 	boiler BOOLEAN DEFAULT FALSE,
+	role VARCHAR(160) DEFAULT 'USER'
 	flat INT
 )
 

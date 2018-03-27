@@ -5,7 +5,7 @@ import Overlay from './../commons/components/overlay/overlay';
 import Ids from './body/ids';
 import Account from './body/account';
 
-import {getUserData} from './../commons/utils/user-service';
+import {getUserData, getAllUsersData} from './../commons/utils/user-service';
 import {logoutRedirect} from './../commons/utils/auth';
 import {isTokenSet, removeToken} from './../commons/utils/tokens';
 import {getUser, setUser} from './../commons/utils/user-data';
@@ -48,9 +48,9 @@ export default class Dashboard extends React.Component {
 		switch(pathname) {
 			case '/':
 			case '/contul-meu':
-				return <Account user={{email, name, phone}} />
+				return <Account />
 			case '/indecsi':
-				return <Ids user={{email, name, phone, ids}} />
+				return <Ids />
 			case '/guestbook':
 				return <div>Chat</div>
 			default:

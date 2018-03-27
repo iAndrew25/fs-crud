@@ -23,7 +23,7 @@ export default class Ids extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('AddIds mounted');
+		this.setState(getUser());
 		getUserIds().then(({success, payload}) => {
 			if(success) {
 				this.setState({userIds: payload});
@@ -31,7 +31,6 @@ export default class Ids extends React.Component {
 				console.error('Error fetching user ids.');
 			}
 		});
-		this.setState(this.props);
 	}
 
 	onCloseModal() {
@@ -41,7 +40,7 @@ export default class Ids extends React.Component {
 	async onSaveModal() {
 		let {ck = null, csb = null, cbb = null, hk = null, hsb = null, hbb = null} = this.addIdsApi.getState(),
 			{created_date} = this.state,
-			user_id = getUser().id,
+			user_id = this.state.id,
 			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, user_id, token: getToken(), mode: this.state.modalMode});
 
 		if(setIdsResp.success) {

@@ -12,22 +12,12 @@ export default class Account extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("this.props.firstLog", this.props.firstLog);
 		if(this.props.firstLog === true) {
 			this.setState(getUser())
 			return;
 		}
-		const userData = getUser();
-		if(userData) {
-			const {email = '', name = '', phone = '', id = ''} = userData;
-			this.setState({email, name, phone, id});
-		} else {
-			getUserData().then(({payload}) => {
-				const {email = '', name = '', phone = '', id = ''} = payload;
-				this.setState({email, name, phone, id});
-				setUser(payload);
-			});
-		}
+
+		this.setState(getUser());
 	}
 
 	handleChange(key, value) {
@@ -36,8 +26,6 @@ export default class Account extends React.Component {
 
 	handleSubmit() {
 		const {name = '', phone = '', email = '', password = '', id = ''} = this.state;
-		console.log("this.state", this.state);
-		console.log("this.props", this.props);
 
 		if(this.props.firstLog) {
 			if(password && name && phone && email) {
@@ -51,7 +39,7 @@ export default class Account extends React.Component {
 					setUserData({name, phone, email, password, id, mode: 'CHANGE_INFO'}).then(({success}) => this.setState({success}));
 				}
 			} else {
-				console.log('no e p e');
+				console.error('WTF');
 			}			
 		}
 	}

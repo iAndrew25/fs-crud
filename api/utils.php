@@ -21,21 +21,21 @@
 		global $con;
 		$email = sanitize($email);
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT id FROM users WHERE email = '$email' OR username = '$email'"), MYSQLI_ASSOC)['id'];
+		return mysqli_fetch_assoc(mysqli_query($con, "SELECT id FROM users WHERE email = '$email' OR username = '$email'"))['id'];
 	}
 	
 	function userData($userID) {
 		global $con;
 		$userID = (int)$userID;
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, phone, token, id, username FROM users WHERE id = $userID"), MYSQLI_ASSOC);
+		return mysqli_fetch_assoc(mysqli_query($con, "SELECT email, name, phone, token, id, username FROM users WHERE id = $userID"));
 	}
 
 	function getUserByToken($token) {
 		global $con;
 		$token = sanitize($token);
 
-		return mysqli_fetch_array(mysqli_query($con, "SELECT email, name, id, phone FROM users WHERE token = '$token'"), MYSQLI_ASSOC);
+		return mysqli_fetch_assoc(mysqli_query($con, "SELECT email, name, id, phone, role FROM users WHERE token = '$token'"));
 	}
 
 	function getIdsByToken($token) {
@@ -46,7 +46,7 @@
 		if(isset($userId)) {
 			$ids = array();
 			$result = mysqli_query($con, "SELECT * FROM user_ids WHERE user_id = $userId");
-			while($row = mysqli_fetch_array($result)) {
+			while($row = mysqli_fetch_assoc($result)) {
 				$ids[] = $row;
 			}
 
@@ -114,6 +114,39 @@
 			} else {
 				return false;
 			}
+		}
+	}
+
+	function getAll($token) {
+		global $con;
+		$token = sanitize($token);
+		$userRole = getUserByToken($token)['role'];
+
+		if($userRole == 'ADMIN') {
+			$ids = array();
+			$query = "SELECT 
+				user_ids.ck, 
+				user_ids.csb, 
+				user_ids.cbb, 
+				user_ids.hk, 
+				user_ids.hsb, 
+				user_ids.hbb, 
+				user_ids.created_date, 
+				users.id, 
+				users.name, 
+				users.phone, 
+				users.boiler, 
+				users.flat
+				FROM users 
+				INNER JOIN user_ids ON users.id = user_ids.user_id";
+
+			$result = mysqli_query($con, $query);
+			while($row = mysqli_fetch_assoc($result)) {
+				$ids[] = $row;
+			}
+			return $ids;
+		} else {
+			return false;
 		}
 	}
 
