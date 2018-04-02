@@ -25,7 +25,10 @@ export default class Ids extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log("IDS MOUNTED");
+			console.log("getUser", getUser());
 		this.setState(getUser(), () => {
+				console.log("this.state.role", this.state.role);
 			if(this.state.role === 'USER') {
 				getUserIds().then(({success, payload}) => {
 					if(success) {
@@ -35,7 +38,9 @@ export default class Ids extends React.Component {
 					}
 				});
 			} else if(this.state.role === 'ADMIN') {
+				console.log('admin')
 				getAllUsersData().then(({success, payload}) => {
+					console.log("payload admin", payload);
 					if(success) {
 						this.setState({userIds: payload});
 					} else {
@@ -87,13 +92,14 @@ export default class Ids extends React.Component {
 
 	render() {
 		let {showModal, modalTitle, userIds = [], ids = {}} = this.state;
+		console.log("userIds", userIds);
 
 		return (
 			<div>
 				{this.state.role === 'ADMIN' 
 					? <AdminTable userIds={userIds} openModal={this.openModal} />
-					: <UsersTable userIds={userIds} openModal={this.openModal} />}
-				
+					: <UsersTable userIds={userIds} openModal={this.openModal} />
+				}				
 				
 				<Modal title={modalTitle} open={showModal} onClose={this.onCloseModal} onSave={this.onSaveModal}>
 					<AddIds exposeApi={this.getAddIdsApi} ids={ids} />

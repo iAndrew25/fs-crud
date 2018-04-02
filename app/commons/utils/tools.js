@@ -22,8 +22,9 @@ export const disableAddId = () => {
 }
 
 export const sortByDate = (arr = []) => arr.sort((a, b) => b.created_date - a.created_date);
+
 export const sortByMonth = (arr = []) => {
-	const sortedByMonth = arr.reduce((total, item) => {
+	return arr.reduce((total, item) => {
 		const currentDate = toMMMMYYYY(item.created_date);
 		if(total[currentDate]) {
 			total[currentDate].push(item)
@@ -32,6 +33,4 @@ export const sortByMonth = (arr = []) => {
 		}
 		return total;
 	}, {});
-
-	return sortedByMonth;
 }
