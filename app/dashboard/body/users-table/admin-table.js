@@ -1,4 +1,4 @@
-import {toMMMMYYYY, disableEditId, disableAddId, sortByDate, sortByMonth} from '../../../commons/utils/tools';
+import {toMMMMYYYY, disableEditId, disableAddId, sortByDate, sortByMonth, getUniqueYears} from '../../../commons/utils/tools';
 
 export default class AdminTable extends React.Component {
 	constructor(props) {
@@ -18,11 +18,14 @@ export default class AdminTable extends React.Component {
 	}
 
 	init(data) {
-		const sortedIds = sortByMonth(data.userIds);
+		const sortedIds = sortByMonth(data.userIds),
+			years = getUniqueYears(sortedIds);
+
 		console.log("sortedIds", sortedIds);
 
 		this.setState({
 			sortedIds,
+			years,
 			selectedDate: Object.keys(sortedIds)[0]
 		})
 	}

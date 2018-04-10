@@ -34,3 +34,5 @@ export const sortByMonth = (arr = []) => {
 		return total;
 	}, {});
 }
+
+export const getUniqueYears = (dates = {}) => [...new Set(Object.keys(dates).reduce((total, date) => [...total, date.split(' ')[1]], []))];
