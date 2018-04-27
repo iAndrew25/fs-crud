@@ -1,4 +1,5 @@
-import {toMMMMYYYY, disableEditId, disableAddId, sortByDate, sortByMonth, getUniqueYears} from '../../../commons/utils/tools';
+import {toMMMMYYYY, disableEditId, disableAddId, sortByDate, sortByMonth, getUniqueYears, months} from '../../../commons/utils/tools';
+import classNames from 'classnames';
 
 export default class AdminTable extends React.Component {
 	constructor(props) {
@@ -6,7 +7,8 @@ export default class AdminTable extends React.Component {
 
 		this.state = {};
 		this.init = this.init.bind(this);
-		this.handleDateChange = this.handleDateChange.bind(this);
+		this.handleMonthChange = this.handleMonthChange.bind(this);
+		this.handleYearChange = this.handleYearChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -20,6 +22,7 @@ export default class AdminTable extends React.Component {
 	init(data) {
 		const sortedIds = sortByMonth(data.userIds),
 			years = getUniqueYears(sortedIds);
+			console.log("years", years);
 
 		console.log("sortedIds", sortedIds);
 
@@ -30,19 +33,34 @@ export default class AdminTable extends React.Component {
 		})
 	}
 
-	handleDateChange(selectedDate) {
-		this.setState({selectedDate})
+	handleMonthChange(month) {
+		this.setState({month});
+	}
+
+	handleYearChange(year) {
+		this.setState({year});		
 	}
 
 	render() {
 		const {openModal = () => {}} = this.props,
-			{sortedIds = {}, selectedDate = ''} = this.state,
-			displayedIds = sortedIds[selectedDate] || [];
+			{sortedIds = {}, selectedDate = '', year, month} = this.state,
+			displayedIds = sortedIds[year] && sortedIds[year][month] || [];
 			console.log("displayedIds", displayedIds);
 
 		return(
 			<div className="container">
-				{Object.keys(sortedIds).map(dates => <span onClick={() => this.handleDateChange(dates)}>{dates}</span>)}
+
+				<div class="form-group">
+					<select class="form-control" onChange={e => this.handleYearChange(e.target.value)}>
+						<option>Selectează anul</option>	
+						{Object.keys(sortedIds).map(year => <option key={year} value={year}>{year}</option>)}
+					</select>
+					<ul className="months">
+						{months.map(mnth => <li key={mnth} className={classNames({'selected': mnth === month})} onClick={() => this.handleMonthChange(mnth)}>{mnth}</li>)}
+					</ul>
+				</div>
+
+
 				<table className="table table-hover">
 					<thead>
 						<tr>
@@ -62,7 +80,7 @@ export default class AdminTable extends React.Component {
 						</tr>
 					</thead>
 					<tbody>
-						{displayedIds.map(({flat, boiler, created_date, ck, csb, cbb, hk, hsb, hbb}) => (
+						{displayedIds.map(({flat, boiler, created_date, ck, csb, cbb, hk, hsb, hbb, id}) => (
 							<tr key={created_date}>
 								<td>{flat}</td>
 								<td>{parseInt(boiler) ? 'Da' : 'Nu'}</td>
@@ -73,7 +91,7 @@ export default class AdminTable extends React.Component {
 								<td>{csb}</td>
 								<td>{cbb}</td>
 								<td>
-									<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {ck, csb, cbb, hk, hsb, hbb})}>Modifică</button>
+									<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {id, ck, csb, cbb, hk, hsb, hbb}, 'ADMIN')}>Modifică</button>
 								</td>
 							</tr>
 						))}

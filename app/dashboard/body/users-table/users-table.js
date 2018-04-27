@@ -24,7 +24,7 @@ export default function({userIds = [], openModal = () => {}}) {
 					</tr>
 				</thead>
 				<tbody>
-					{sortedIds.map(({created_date, ck, csb, cbb, hk, hsb, hbb}) => (
+					{sortedIds.map(({created_date, ck, csb, cbb, hk, hsb, hbb, id}) => (
 						<tr key={created_date}>
 							<th>{toMMMMYYYY(created_date)}</th>
 							<td>{hk}</td>
@@ -34,7 +34,7 @@ export default function({userIds = [], openModal = () => {}}) {
 							<td>{csb}</td>
 							<td>{cbb}</td>
 							<td>
-								<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {ck, csb, cbb, hk, hsb, hbb})}>Modifică</button>
+								<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {ck, csb, cbb, hk, id, hsb, hbb}, 'USER')}>Modifică</button>
 							</td>
 						</tr>
 					))}

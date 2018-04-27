@@ -13,7 +13,7 @@ export default class Account extends React.Component {
 
 	componentDidMount() {
 		if(this.props.firstLog === true) {
-			this.setState(getUser())
+			this.setState(getUser());
 			return;
 		}
 

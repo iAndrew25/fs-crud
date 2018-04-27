@@ -66,6 +66,7 @@
 		// check if user id exists
 		$user_id = sanitize($data->user_id ?: 0);
 		$ck = sanitize($data->ck ?: null);
+		$id = sanitize($data->id ?: null);
 		$csb = sanitize($data->csb ?: null);
 		$cbb = sanitize($data->cbb ?: null);
 		$hk = sanitize($data->hk ?: null);
@@ -75,7 +76,7 @@
 		$mode = sanitize($data->mode);
 
 		if($mode == 'EDIT') {
-			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE user_id = '$user_id' AND created_date = '$created_date'") ? true : false;
+			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE id = '$id'") ? true : false;
 		} else if($mode == 'ADD') {
 			return mysqli_query($con, "INSERT INTO user_ids(user_id, ck, csb, cbb, hk, hsb, hbb, created_date) VALUES('$user_id', '$ck', '$csb', '$cbb', '$hk', '$hsb', '$hbb', '$created_date')") ? true : false;
 		} else {
@@ -125,6 +126,7 @@
 		if($userRole == 'ADMIN') {
 			$ids = array();
 			$query = "SELECT 
+				user_ids.id, 
 				user_ids.ck, 
 				user_ids.csb, 
 				user_ids.cbb, 
@@ -137,7 +139,7 @@
 				users.phone, 
 				users.boiler, 
 				users.flat
-				FROM users 
+				FROM users
 				INNER JOIN user_ids ON users.id = user_ids.user_id";
 
 			$result = mysqli_query($con, $query);

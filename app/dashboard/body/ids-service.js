@@ -7,9 +7,9 @@ export function getUserIds() {
 	});
 }
 
-export function setUserIds({user_id, ck, csb, cbb, hk, hsb, hbb, created_date, mode}) {
+export function setUserIds(ids) {
 	return fetch(`/ids/set.php?tokenId=${getToken()}`, {
 		method: 'POST',
-		body: JSON.stringify({user_id, ck, csb, cbb, hk, hsb, hbb, created_date, mode})
+		body: JSON.stringify(ids)
 	});
 }

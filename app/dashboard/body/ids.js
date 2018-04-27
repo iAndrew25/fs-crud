@@ -58,18 +58,30 @@ export default class Ids extends React.Component {
 	}
 
 	async onSaveModal() {
-		let {ck = null, csb = null, cbb = null, hk = null, hsb = null, hbb = null} = this.addIdsApi.getState(),
-			{created_date} = this.state,
+		let {ck = null, csb = null, cbb = null, hk = null, hsb = null, hbb = null, id} = this.addIdsApi.getState(),
+			{created_date, role} = this.state,
 			user_id = this.state.id,
-			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, user_id, token: getToken(), mode: this.state.modalMode});
+			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, id, user_id, token: getToken(), mode: this.state.modalMode});
 
 		if(setIdsResp.success) {
-			let getIdsResp = await getUserIds();
-			if(getIdsResp.success) {
-				this.setState({userIds: getIdsResp.payload});
-				this.onCloseModal();
+			if(role === 'USER') {
+				let getIdsResp = await getUserIds();
+				if(getIdsResp.success) {
+					this.setState({userIds: getIdsResp.payload});
+					this.onCloseModal();
+				} else {
+					console.error('Error fetching user ids.');
+				}
+			} else if(role === 'ADMIN') {
+				let getIdsResp = await getAllUsersData(getToken());
+				if(getIdsResp.success) {
+					this.setState({userIds: getIdsResp.payload});
+					this.onCloseModal();
+				} else {
+					console.error('Error fetching user ids.');
+				}
 			} else {
-				console.error('Error fetching user ids.');
+				console.error('Unknown role');
 			}
 		} else {
 			console.error('Error setting user ids.');
@@ -80,13 +92,14 @@ export default class Ids extends React.Component {
 		this.addIdsApi = api;
 	}
 
-	openModal(mode = 'ADD', created_date = new Date().getTime(), ids = {}) {
+	openModal(mode = 'ADD', created_date = new Date().getTime(), ids = {}, role) {
 		this.setState({
 			showModal: true,
 			modalMode: mode,
 			modalTitle: mode === 'ADD' ? 'Adaugă indecși' : 'Modifică indecși',
 			created_date,
-			ids
+			ids,
+			role
 		});
 	}
 

@@ -1,4 +1,4 @@
-const months = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
+export const months = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
 
 export const toMMMMYYYY = (date = new Date().getTime()) => {
 	const fullDate = new Date(parseInt(date));
@@ -25,11 +25,17 @@ export const sortByDate = (arr = []) => arr.sort((a, b) => b.created_date - a.cr
 
 export const sortByMonth = (arr = []) => {
 	return arr.reduce((total, item) => {
-		const currentDate = toMMMMYYYY(item.created_date);
-		if(total[currentDate]) {
-			total[currentDate].push(item)
+		const [month, year] = toMMMMYYYY(item.created_date).split(' ');
+		if(total[year]) {
+			if(total[year][month]) {
+				total[year][month].push(item);
+			} else {
+				total[year][month] = [item];
+			}
 		} else {
-			total[currentDate] = [item]
+			total[year] = {
+				[month]: [item]
+			}
 		}
 		return total;
 	}, {});

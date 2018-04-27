@@ -27,6 +27,26 @@
 	position: relative;
 }
 
+.months {
+	list-style: none;
+	text-align: center;
+	margin-top: 10px;
+
+	> li {
+		display: inline-block;
+		padding: 5px;
+		border-right: 1px solid #CCC;
+		cursor: pointer;
+
+		&.selected {
+			font-weight: bold;
+		}
+
+		&:last-child {
+			border: none;
+		}
+	}
+}
 
 .container {
 	margin-top: 20px;
