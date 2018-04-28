@@ -13,9 +13,9 @@
 		$email = sanitize($email);
 		$userID = userIdFromEmail($email);
 		$password = md5(sanitize($password));
-		$passwordFirstLog = sanitize($password);
+		$passwordFirstLog = $password;
 
-		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE (email = '$email' OR username = '$email') AND (password = '$password' OR password = '$passwordFirstLog"))) == 1 ? $userID : false;
+		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE (email = '$email' OR username = '$email') AND (password = '$password' OR password = '$passwordFirstLog')")) == 1 ? $userID : false;
 	}
 
 	function userIdFromEmail($email) {
