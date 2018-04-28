@@ -8,7 +8,7 @@
 		$checkUser = userExists($data->email);
 
 		if($checkUser) {
-			$changed = changePasword($data->email);
+			$changed = changePassword($data->email);
 
 			if(isset($changed)) {
 				//email send

@@ -12,9 +12,10 @@
 		global $con;
 		$email = sanitize($email);
 		$userID = userIdFromEmail($email);
-		$password = $password;//md5(sanitize($password));
+		$password = md5(sanitize($password));
+		$passwordFirstLog = sanitize($password);
 
-		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE (email = '$email' OR username = '$email') AND password = '$password'")) == 1 ? $userID : false;
+		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE (email = '$email' OR username = '$email') AND (password = '$password' OR password = '$passwordFirstLog"))) == 1 ? $userID : false;
 	}
 
 	function userIdFromEmail($email) {
@@ -66,7 +67,6 @@
 		// check if user id exists
 		$user_id = sanitize($data->user_id ?: 0);
 		$ck = sanitize($data->ck ?: null);
-		$id = sanitize($data->id ?: null);
 		$csb = sanitize($data->csb ?: null);
 		$cbb = sanitize($data->cbb ?: null);
 		$hk = sanitize($data->hk ?: null);
@@ -76,7 +76,8 @@
 		$mode = sanitize($data->mode);
 
 		if($mode == 'EDIT') {
-			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE id = '$id'") ? true : false;
+			$id = sanitize($data->id ?: null);
+			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE id = $id") ? true : false;
 		} else if($mode == 'ADD') {
 			return mysqli_query($con, "INSERT INTO user_ids(user_id, ck, csb, cbb, hk, hsb, hbb, created_date) VALUES('$user_id', '$ck', '$csb', '$cbb', '$hk', '$hsb', '$hbb', '$created_date')") ? true : false;
 		} else {
@@ -84,7 +85,7 @@
 		}
 	}
 
-	function changePasword($email) {
+	function changePassword($email) {
 		global $con;
 
 		$email = sanitize($email ?: null);
@@ -101,7 +102,7 @@
 		$name = sanitize($user->name ?: 0);
 		$phone = sanitize($user->phone ?: 0);
 		$email = sanitize($user->email ?: 0);
-		$password = sanitize($user->password ?: 0);
+		$password = md5(sanitize($user->password ?: 0));
 		$mode = sanitize($user->mode ?: 0);
 
 		if($mode == 'FIRST_LOG') {
@@ -133,8 +134,7 @@
 				user_ids.hk, 
 				user_ids.hsb, 
 				user_ids.hbb, 
-				user_ids.created_date, 
-				users.id, 
+				user_ids.created_date,
 				users.name, 
 				users.phone, 
 				users.boiler, 

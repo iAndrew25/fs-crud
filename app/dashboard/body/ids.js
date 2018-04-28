@@ -64,6 +64,7 @@ export default class Ids extends React.Component {
 			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, id, user_id, token: getToken(), mode: this.state.modalMode});
 
 		if(setIdsResp.success) {
+			console.log("this.state", this.state);
 			if(role === 'USER') {
 				let getIdsResp = await getUserIds();
 				if(getIdsResp.success) {
@@ -92,24 +93,23 @@ export default class Ids extends React.Component {
 		this.addIdsApi = api;
 	}
 
-	openModal(mode = 'ADD', created_date = new Date().getTime(), ids = {}, role) {
+	openModal(mode = 'ADD', created_date = new Date().getTime(), ids = {}) {
 		this.setState({
 			showModal: true,
 			modalMode: mode,
 			modalTitle: mode === 'ADD' ? 'Adaugă indecși' : 'Modifică indecși',
 			created_date,
-			ids,
-			role
+			ids
 		});
 	}
 
 	render() {
-		let {showModal, modalTitle, userIds = [], ids = {}} = this.state;
+		let {showModal, modalTitle, role, userIds = [], ids = {}} = this.state;
 		console.log("userIds", userIds);
 
 		return (
 			<div>
-				{this.state.role === 'ADMIN' 
+				{role === 'ADMIN' 
 					? <AdminTable userIds={userIds} openModal={this.openModal} />
 					: <UsersTable userIds={userIds} openModal={this.openModal} />
 				}				

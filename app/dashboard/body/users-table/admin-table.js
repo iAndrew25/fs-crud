@@ -91,7 +91,7 @@ export default class AdminTable extends React.Component {
 								<td>{csb}</td>
 								<td>{cbb}</td>
 								<td>
-									<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {id, ck, csb, cbb, hk, hsb, hbb}, 'ADMIN')}>Modifică</button>
+									<button type="button" className="btn btn-info btn-sm" disabled={disableEditId(created_date)} onClick={() => openModal('EDIT', created_date, {id, ck, csb, cbb, hk, hsb, hbb})}>Modifică</button>
 								</td>
 							</tr>
 						))}
