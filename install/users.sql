@@ -14,11 +14,11 @@ CREATE TABLE users (
 CREATE TABLE user_ids (
 	id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 	user_id INT,
-	ck INT,
-	csb INT,
-	cbb INT,
-	hk INT,
-	hsb INT,
-	hbb INT,
+	ck VARCHAR(20),
+	csb VARCHAR(20),
+	cbb VARCHAR(20),
+	hk VARCHAR(20),
+	hsb VARCHAR(20),
+	hbb VARCHAR(20),
 	created_date BIGINT
 )

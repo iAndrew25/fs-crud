@@ -8,12 +8,12 @@
 		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE email = '$email' OR username = '$email'")) == 1 ? true : false;
 	}
 
-	function login($email, $password) {
+	function login($email, $pwd) {
 		global $con;
 		$email = sanitize($email);
 		$userID = userIdFromEmail($email);
-		$password = md5(sanitize($password));
-		$passwordFirstLog = $password;
+		$password = md5(sanitize($pwd));
+		$passwordFirstLog = sanitize($pwd);
 
 		return mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE (email = '$email' OR username = '$email') AND (password = '$password' OR password = '$passwordFirstLog')")) == 1 ? $userID : false;
 	}
@@ -65,18 +65,18 @@
 	function setIds($data) {
 		global $con;
 		// check if user id exists
-		$user_id = sanitize($data->user_id ?: 0);
-		$ck = sanitize($data->ck ?: null);
-		$csb = sanitize($data->csb ?: null);
-		$cbb = sanitize($data->cbb ?: null);
-		$hk = sanitize($data->hk ?: null);
-		$hsb = sanitize($data->hsb ?: null);
-		$hbb = sanitize($data->hbb ?: null);
-		$created_date = sanitize($data->created_date ?: 0);
+		$user_id = sanitize($data->user_id);
+		$ck = sanitize($data->ck);
+		$csb = sanitize($data->csb);
+		$cbb = sanitize($data->cbb);
+		$hk = sanitize($data->hk);
+		$hsb = sanitize($data->hsb);
+		$hbb = sanitize($data->hbb);
+		$created_date = sanitize($data->created_date);
 		$mode = sanitize($data->mode);
 
 		if($mode == 'EDIT') {
-			$id = sanitize($data->id ?: null);
+			$id = sanitize($data->id);
 			return mysqli_query($con, "UPDATE user_ids SET ck = '$ck', csb = '$csb', cbb = '$cbb', hk = '$hk', hsb = '$hsb', hbb = '$hbb' WHERE id = $id") ? true : false;
 		} else if($mode == 'ADD') {
 			return mysqli_query($con, "INSERT INTO user_ids(user_id, ck, csb, cbb, hk, hsb, hbb, created_date) VALUES('$user_id', '$ck', '$csb', '$cbb', '$hk', '$hsb', '$hbb', '$created_date')") ? true : false;

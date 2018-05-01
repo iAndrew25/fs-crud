@@ -14,6 +14,8 @@ export default class Authentication extends React.Component {
 			name: '',
 			forceRedirect: false,
 			lostPassword: false,
+			loginBtnDisable: false,
+			lostPassBtnDisable: false
 		}
 
 		this.handleChange = this.handleChange.bind(this);
@@ -23,7 +25,9 @@ export default class Authentication extends React.Component {
 	}
 
 	handleLogin() {
+		console.log("handleLogin");
 		const {email, password} = this.state;
+		this.setState({loginBtnDisable: true});
 		login(email, password).then(({payload}) => {
 			setUser(payload);
 			if(payload.email) {
@@ -32,7 +36,8 @@ export default class Authentication extends React.Component {
 				this.setState({forceRedirect: 'INIT'})
 			}
 		})
-		.catch(loginResp => this.setState({loginResp}));
+		.catch(loginResp => this.setState({loginResp}))
+		.finally(() => this.setState({loginBtnDisable: false}));
 	}
 
 	toggleComponentDisplay() {
@@ -45,6 +50,7 @@ export default class Authentication extends React.Component {
 
 	handleLostPass() {
 		const {email} = this.state;
+		this.setState({lostPassBtnDisable: true});
 		lostPassword(email)
 			.then(({message, success}) => {
 				this.setState({
@@ -64,10 +70,11 @@ export default class Authentication extends React.Component {
 					email: ''
 				})			
 			})
+			.finally(() => this.setState({lostPassBtnDisable: false}));
 	}
  
 	render() {
-		const {email, password, forceRedirect, loginResp, lostPassword, lostPassResp = {}} = this.state;
+		const {email, password, forceRedirect, loginResp, lostPassword, lostPassResp = {}, lostPassBtnDisable, loginBtnDisable} = this.state;
 
 		if(forceRedirect === 'DASHBOARD') {
 			return <Redirect to='/' />
@@ -83,6 +90,7 @@ export default class Authentication extends React.Component {
 						toggleComponentDisplay={this.toggleComponentDisplay}
 						handleChange={this.handleChange}
 						lostPassResp={lostPassResp}
+						disabled={lostPassBtnDisable}
 						handleLostPass={this.handleLostPass} />
 					: <Login 
 						email={email}
@@ -90,6 +98,7 @@ export default class Authentication extends React.Component {
 						toggleComponentDisplay={this.toggleComponentDisplay}
 						handleLogin={this.handleLogin}
 						loginResp={loginResp}
+						disabled={loginBtnDisable}
 						handleChange={this.handleChange} />
 					}
 					{this.state.toLogin ? <Redirect to="/dashboard" /> : ''}

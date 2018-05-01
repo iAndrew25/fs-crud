@@ -58,7 +58,7 @@ export default class Ids extends React.Component {
 	}
 
 	async onSaveModal() {
-		let {ck = null, csb = null, cbb = null, hk = null, hsb = null, hbb = null, id} = this.addIdsApi.getState(),
+		let {ck = 0, csb = 0, cbb = 0, hk = 0, hsb = 0, hbb = 0, id} = this.addIdsApi.getState(),
 			{created_date, role} = this.state,
 			user_id = this.state.id,
 			setIdsResp = await setUserIds({ck, csb, cbb, hk, hsb, hbb, created_date, id, user_id, token: getToken(), mode: this.state.modalMode});

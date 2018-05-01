@@ -47,10 +47,10 @@ export default class Dashboard extends React.Component {
 
 		switch(pathname) {
 			case '/':
-			case '/contul-meu':
-				return <Account />
 			case '/indecsi':
 				return <Ids />
+			case '/contul-meu':
+				return <Account />
 			case '/guestbook':
 				return <div>Chat</div>
 			default:

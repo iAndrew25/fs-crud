@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-export default function({email, handleChange, handleLostPass, lostPassResp, toggleComponentDisplay}) {
+export default function({email, handleChange, handleLostPass, lostPassResp, toggleComponentDisplay, disabled = false}) {
 	const {success, message} = lostPassResp;
 	return(
 		<div>
@@ -11,9 +11,9 @@ export default function({email, handleChange, handleLostPass, lostPassResp, togg
 					<label htmlFor="lost-pass-email">Adresa de e-mail/Numele de utilizator</label>
 					<input type="email" className="form-control" id="lost-pass-email" placeholder="E-mail Address" value={email} onChange={e => handleChange('email', e.target.value)}/>
 				</div>
-				<button className="btn btn-primary btn-submit" onClick={() => handleLostPass()}>Trimite o nouă parolă</button>
+				<button className="btn btn-primary btn-submit" onClick={handleLostPass} disabled={disabled}>Trimite o nouă parolă</button>
 			</div>}
-			<small className="form-text text-muted back-to-login" onClick={() => toggleComponentDisplay()}>Înapoi la login.</small>
+			<small className="form-text text-muted back-to-login" onClick={toggleComponentDisplay}>Înapoi la login.</small>
 		</div>
 	)
 }
