@@ -52,7 +52,7 @@ export default class Dashboard extends React.Component {
 			case '/contul-meu':
 				return <Account />
 			case '/guestbook':
-				return <div>Chat</div>
+				return <div dangerouslySetInnerHTML={{__html: "<iframe src='https://minnit.chat/LaBloc?embedweb' width='100%' height='500' style='border:none;' allowTransparency='true'></iframe>"}} />
 			default:
 				return null;
 		}
